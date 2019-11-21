@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="sender">
+    <input type="text" id="text">
+    <input type="button" onclick="sendMessage()" value="online">
+</div>
+<div id="receiver">
+
+</div>
+
+<script>
+    var ws = new WebSocket("ws://localhost:8084");
+
+    ws.onopen = function (e) {
+        console.log('Connection to server opened');
+    }
+    ws.onmessage = function(event) {
+        console.log('Client received a message:', event.data);
+        let node = document.createElement('span');
+        node.innerText = event.data;
+        document.getElementById('receiver').appendChild(node);
+    };
+    ws.onclose = function (e) {
+        console.log('connection closed.');
+    }
+    function sendMessage() {
+        let val = document.getElementById('text').value
+        console.log(val)
+        ws.send(val);
+    }
+</script>
+</body>
+</html>
